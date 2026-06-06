@@ -24,9 +24,9 @@ redzlib:Notification("DEMOz HUB", "طھظ… طھط´ط؛ظٹظ„ ط§ظ„ط³
 ---------------------------------------------------------------------
 -- [ ط§ظ„طھط±ظƒظٹط² ط¹ظ„ظ‰ ط¥ظ†ط´ط§ط، ط§ظ„طھط¨ظˆظٹط¨ط§طھ ظˆط§ظ„ظ€ Tabs ط¨ط§ظ„طµظٹط؛ط© ط§ظ„ظ…طھظˆط§ظپظ‚ط© ]
 ---------------------------------------------------------------------
-local SongsTab = Window:MakeTab({ Name = "ظ‚ط§ط¦ظ…ط© ط§ظ„ط£ط؛ط§ظ†ظٹ ظˆط§ظ„ظ€ IDs", Icon = "rbxassetid://4483345998" })
-local AntiTab = Window:MakeTab({ Name = "ط§ظ„ظ…ط¶ط§ط¯ط§طھ ظˆط§ظ„ظ€ Anti", Icon = "rbxassetid://4483345998" })
-local CreditsTab = Window:MakeTab({ Name = "ط§ظ„ط­ظ‚ظˆظ‚ ظˆط§ظ„ظ…ط·ظˆط±", Icon = "rbxassetid://4483345998" })
+local SongsTab = Window:MakeTab({ Name = "Songs List", Icon = "rbxassetid://4483345998" })
+local AntiTab = Window:MakeTab({ Name = "Anti Features", Icon = "rbxassetid://4483345998" })
+local CreditsTab = Window:MakeTab({ Name = "Credits", Icon = "rbxassetid://4483345998" })
 
 ---------------------------------------------------------------------
 -- [1] ظ†ط¸ط§ظ… ط§ظ„طµظˆطھظٹط§طھ ظˆط§ظ„ط£ط؛ط§ظ†ظٹ ط§ظ„ظ…ط­ط³ظ† (ط¯ط§ط®ظ„ SongsTab)
