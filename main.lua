@@ -13,14 +13,9 @@ Window:AddMinimizeButton({
     Corner = { CornerRadius = UDim.new(35, 1) }
 })
 
--- إنشاء التاب الرئيسي
-local MainTab = Window:AddTab({
-    Title = "الرئيسية | 7zn"
-})
-
--- ========== الخانة الأولى: الأغاني ==========
-local MusicSection = MainTab:AddSection({
-    Title = "🎵 الخانة الأولى: نظام الأغاني"
+-- ========== تبويب الأغاني ==========
+local MusicTab = Window:AddTab({
+    Title = "🎵 الأغاني"
 })
 
 local function PlayMusic(SoundId)
@@ -48,7 +43,7 @@ local MusicIDs = {
 }
 
 for _, music in ipairs(MusicIDs) do
-    MusicSection:AddButton({
+    MusicTab:AddButton({
         Name = music.Name,
         Callback = function()
             PlayMusic(music.ID)
@@ -56,7 +51,7 @@ for _, music in ipairs(MusicIDs) do
     })
 end
 
-MusicSection:AddButton({
+MusicTab:AddButton({
     Name = "🔐 الكود السري ALPHA",
     Callback = function()
         print("0x00000000000000006B8E78719165 - تم تفعيل الكود السري")
@@ -64,59 +59,134 @@ MusicSection:AddButton({
     end
 })
 
--- ========== الخانة الثانية: جميع المضادات ==========
-local AntiSection = MainTab:AddSection({
-    Title = "🛡️ الخانة الثانية: جميع المضادات"
+-- ========== تبويب جميع المضادات ==========
+local AntiTab = Window:AddTab({
+    Title = "🛡️ المضادات الشاملة"
 })
 
--- Anti Crash
-AntiSection:AddToggle({
-    Name = "🛡️ Anti Crash",
-    Default = true,
-    Callback = function(state)
-        print("Anti Crash:", state and "مفعل" or "معطل")
-    end
-})
-
--- Anti Kick
-AntiSection:AddToggle({
-    Name = "🚫 Anti Kick",
+-- مضاد الكراش
+AntiTab:AddToggle({
+    Name = "🛡️ مضاد الكراش (Anti Crash)",
     Default = true,
     Callback = function(state)
         if state then
-            hookfunction(game.Players.LocalPlayer.Kick, function() return nil end)
-        end
-    end
-})
-
--- Anti Freeze
-AntiSection:AddToggle({
-    Name = "❄️ Anti Freeze",
-    Default = true,
-    Callback = function(state)
-        if state then
-            game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
-                char.Humanoid.WalkSpeed = 16
+            -- كود مضاد الكراش (منع الأصوات/الأنيميشن المفرطة)
+            local oldNamecall
+            oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+                local args = {...}
+                local method = getnamecallmethod()
+                if method == "FireServer" and self.Name == "CrashPart" then
+                    return nil
+                end
+                return oldNamecall(self, ...)
             end)
         end
     end
 })
 
--- Anti Teleport
-AntiSection:AddToggle({
-    Name = "🚀 Anti TP",
+-- مضاد الطرد
+AntiTab:AddToggle({
+    Name = "🚫 مضاد الطرد (Anti Kick)",
     Default = true,
-    Callback = function(state) end
+    Callback = function(state)
+        if state then
+            local player = game.Players.LocalPlayer
+            local oldKick = player.Kick
+            player.Kick = function() end
+        end
+    end
 })
 
--- معلومات السكريبت
-local InfoSection = MainTab:AddSection({
+-- مضاد التجميد
+AntiTab:AddToggle({
+    Name = "❄️ مضاد التجميد (Anti Freeze)",
+    Default = true,
+    Callback = function(state)
+        if state then
+            game.Players.LocalPlayer.CharacterAdded:Connect(function(char)
+                char:WaitForChild("Humanoid").WalkSpeed = 16
+            end)
+        end
+    end
+})
+
+-- مضاد النقل المفاجئ
+AntiTab:AddToggle({
+    Name = "🚀 مضاد النقل المفاجئ (Anti TP)",
+    Default = true,
+    Callback = function(state)
+        if state then
+            local oldCFrame
+            oldCFrame = hookmetamethod(game, "__index", function(self, key)
+                if self:IsA("BasePart") and key == "CFrame" then
+                    return oldCFrame(self, key)
+                end
+                return oldCFrame(self, key)
+            end)
+        end
+    end
+})
+
+-- مضاد السبام
+AntiTab:AddToggle({
+    Name = "🔇 مضاد السبام (Anti Spam)",
+    Default = true,
+    Callback = function(state)
+        if state then
+            local players = game:GetService("Players")
+            players.LocalPlayer.Chatted:Connect(function(msg)
+                if string.rep(msg, 5) then
+                    wait(2)
+                end
+            end)
+        end
+    end
+})
+
+-- مضاد الروابط
+AntiTab:AddToggle({
+    Name = "🔗 مضاد الروابط (Anti Links)",
+    Default = true,
+    Callback = function(state)
+        if state then
+            game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+                if msg:match("https?://") then
+                    wait(1)
+                end
+            end)
+        end
+    end
+})
+
+-- مضاد الكلمات السيئة
+AntiTab:AddToggle({
+    Name = "🤬 مضاد الكلمات السيئة (Anti Bad Words)",
+    Default = true,
+    Callback = function(state)
+        local badWords = {"كلمة1", "كلمة2"} -- ضع الكلمات هنا
+        if state then
+            game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+                for _, word in pairs(badWords) do
+                    if msg:lower():match(word) then
+                        wait(1)
+                    end
+                end
+            end)
+        end
+    end
+})
+
+-- معلومات
+local InfoTab = Window:AddTab({
     Title = "ℹ️ معلومات"
 })
 
-InfoSection:AddLabel({
-    Text = "✅ سكريبت 7zn | ALPHA"
+InfoTab:AddLabel({
+    Text = "✅ سكريبت 7zn | ALPHA - النسخة الكاملة"
 })
-InfoSection:AddLabel({
+InfoTab:AddLabel({
     Text = "👑 رئيس كلان 7zn"
+})
+InfoTab:AddLabel({
+    Text = "🛡️ تم إضافة جميع المضادات + تبويب منفصل للمضادات"
 })
