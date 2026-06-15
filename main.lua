@@ -1,12 +1,35 @@
 local player = game.Players.LocalPlayer
 local gui = script.Parent
 
+local eyeButton = Instance.new("ImageButton")
+eyeButton.Size = UDim2.new(0, 45, 0, 45)
+eyeButton.Position = UDim2.new(0, 10, 0, 10)
+eyeButton.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+eyeButton.BorderSizePixel = 0
+eyeButton.Image = "rbxassetid://6031090999"
+eyeButton.Parent = gui
+
+local eyeCorner = Instance.new("UICorner")
+eyeCorner.CornerRadius = UDim.new(1, 0)
+eyeCorner.Parent = eyeButton
+
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, 450, 0, 500)
 mainFrame.Position = UDim2.new(0.5, -225, 0.5, -250)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 mainFrame.BorderSizePixel = 0
 mainFrame.Parent = gui
+
+local insideImage = Instance.new("ImageLabel")
+insideImage.Size = UDim2.new(0, 60, 0, 60)
+insideImage.Position = UDim2.new(1, -75, 0, 5)
+insideImage.BackgroundTransparency = 1
+insideImage.Image = "rbxassetid://1000035239"
+insideImage.Parent = mainFrame
+
+local insideImageCorner = Instance.new("UICorner")
+insideImageCorner.CornerRadius = UDim.new(1, 0)
+insideImageCorner.Parent = insideImage
 
 local mainCorner = Instance.new("UICorner")
 mainCorner.CornerRadius = UDim.new(0, 12)
@@ -50,9 +73,15 @@ closeBtn.MouseButton1Click:Connect(function()
     gui.Enabled = false
 end)
 
+local function toggleGui()
+    gui.Enabled = not gui.Enabled
+end
+
+eyeButton.MouseButton1Click:Connect(toggleGui)
+
 game:GetService("UserInputService").InputBegan:Connect(function(input, processed)
     if not processed and input.KeyCode == Enum.KeyCode.K then
-        gui.Enabled = not gui.Enabled
+        toggleGui()
     end
 end)
 
